@@ -1,0 +1,67 @@
+server:
+  port: 9096
+
+spring:
+  application:
+    name: mop-billing-service
+
+  datasource:
+    url: jdbc:oracle:thin:@//10.16.2.165:1521/mop_pdb1.data.ocevcn.oraclevcn.com
+    username: MOPUSER
+    password: EsnaD##1234
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: none
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    listener:
+      auto-startup: false   # ✅ correct place
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        spring.json.add.type.headers: false
+
+jwt:
+  secret: ${JWT_SECRET:mop-billing-service-hs256-secret-must-be-at-least-32-chars!!}
+  expiration-ms: 86400000
+  refresh-expiration-ms: 604800000
+
+logging:
+  level:
+    com.mop.billing: DEBUG
+    org.springframework.security: INFO
+    org.apache.kafka: OFF
+    org.springframework.kafka: OFF
+    org.hibernate.SQL: WARN
+
+feature:
+  kafka-enabled: false
+
+tahseel:
+  wsdlUrl: https://tahseeltest.mof.gov.sa:5703/BillsMngAGW
+  keystore:
+    file: C:\tahseel\test\keystore\mykeystore.jks
+    password: P@ssw0rd
+    instance: JKS
+    alias: mim
+  ssl:
+    trustStore: C:\tahseel\test\keystore\mykeystore.jks
+    trustStorePassword: P@ssw0rd
+
+#tahseel:
+#  wsdlUrl: https://tahseeltest.mof.gov.sa:5703/BillsMngAGW
+#  keystore:
+#   file: C:\keystore\mykeystore.jks
+#   password: P@ssw0rd
+#   instance: JKS
+#   alias: mim
+#  ssl:
+#    trustStore: C:\keystore\mykeystore.jks
+#    trustStorePassword: P@ssw0rd
