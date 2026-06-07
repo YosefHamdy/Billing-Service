@@ -54,8 +54,7 @@ public class PaymentNotificationService implements IPaymentNotificationService {
         if (!validateMessageHeader(req.getPartnerId(), req.getFunctionId(),
                 tahseelProps.getPmtNotificationFuncId())) {
             log.warn("[PaymentNotification] Header validation failed for reqId={}", req.getReqUId());
-            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_INVALID_PARTNER,
-                    "bill=" + req.getBillNo());
+            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_INVALID_PARTNER);
             return CODE_INVALID_PARTNER;
         }
 
@@ -112,15 +111,13 @@ public class PaymentNotificationService implements IPaymentNotificationService {
                     req.getReqUId());
 
             // 5. Audit record
-            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_SUCCESS,
-                    "bill=" + req.getBillNo() + " amount=" + req.getPmtAmount());
+            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_SUCCESS);
 
             return CODE_SUCCESS;
 
         } catch (Exception e) {
             log.error("[PaymentNotification] Processing failed for bill={}", req.getBillNo(), e);
-            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_GENERAL_ERROR,
-                    "ERROR: " + e.getMessage());
+            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_GENERAL_ERROR);
             return CODE_GENERAL_ERROR;
         }
     }
@@ -137,7 +134,7 @@ public class PaymentNotificationService implements IPaymentNotificationService {
                 req.getTotalTransactions(), req.getTotalAmount());
 
         if (!validateMessageHeader(req.getPartnerId(), req.getFunctionId(), null)) {
-            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_INVALID_PARTNER, "recon");
+            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_INVALID_PARTNER);
             return CODE_INVALID_PARTNER;
         }
 
@@ -149,14 +146,12 @@ public class PaymentNotificationService implements IPaymentNotificationService {
                     req.getTotalTransactions(),
                     req.getTotalAmount());
 
-            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_SUCCESS,
-                    "recon date=" + req.getReconciliationDate());
+            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_SUCCESS);
             return CODE_SUCCESS;
 
         } catch (Exception e) {
             log.error("[Reconciliation] Processing failed", e);
-            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_GENERAL_ERROR,
-                    "ERROR: " + e.getMessage());
+            saveAudit(req.getReqUId(), req.getFunctionId(), CODE_GENERAL_ERROR);
             return CODE_GENERAL_ERROR;
         }
     }
@@ -189,14 +184,13 @@ public class PaymentNotificationService implements IPaymentNotificationService {
     }
 
     private void saveAudit(String requestId, String functionId,
-                            String statusCode, String notes) {
+                            String statusCode) {
         try {
             SadadWsAuditRequest audit = SadadWsAuditRequest.builder()
                     .requestId(requestId)
                     .functionId(functionId)
                     .message(statusCode)
                     .createdDate(new Date())
-                    .notes(notes)
                     .build();
             auditRepo.save(audit);
         } catch (Exception e) {

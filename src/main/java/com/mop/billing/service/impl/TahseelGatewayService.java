@@ -264,8 +264,8 @@ public class TahseelGatewayService implements ITahseelGatewayService {
         // ================= AUDIT =================
         saveAudit(requestUuid,
                 tahseelProps.getBillManageFuncId(),
-                resultCode,
-                "bill=" + bill.getBillNo() + " action=" + action);
+                resultCode
+                 );
 
         // ================= UPDATE DB =================
         if (STATUS_SUCCESS.equals(resultCode)) {
@@ -276,8 +276,7 @@ public class TahseelGatewayService implements ITahseelGatewayService {
             });
         }
 
-        saveAudit(requestUuid, tahseelProps.getBillManageFuncId(), resultCode,
-        "bill=" + bill.getBillNo() + " action=" + action);
+        saveAudit(requestUuid, tahseelProps.getBillManageFuncId(), resultCode);
         return resultCode;
     }
 
@@ -470,14 +469,13 @@ public class TahseelGatewayService implements ITahseelGatewayService {
 //    }
 
     private void saveAudit(String requestId, String functionId,
-                            String statusCode, String notes) {
+                            String statusCode) {
         try {
             SadadWsAuditRequest audit = SadadWsAuditRequest.builder()
                     .requestId(requestId)
                     .functionId(functionId)
                     .message(statusCode)
                     .createdDate(new Date())
-                    .notes(notes)
                     .build();
             auditRepo.save(audit);
         } catch (Exception e) {

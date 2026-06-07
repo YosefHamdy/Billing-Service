@@ -32,6 +32,6 @@ public class SadadWsAuditRequest {
     /** FuncId from the SOAP header (e.g. BillsMng, PmtNotification) */
     @Column(name = "FUCTION_ID")    private String functionId;
 
-    /** Extra context: bill number, action type, etc. */
-    @Column(name = "NOTES")         private String notes;
+//    /** Extra context: bill number, action type, etc. */
+//    @Column(name = "NOTES")         private String notes;
 }
