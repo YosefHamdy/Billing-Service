@@ -66,8 +66,12 @@ public class BillController {
     public ResponseEntity<ApiResponse<BillResponse>> generateBill(
             @Valid @RequestBody GenerateBillRequest request) throws Exception {
 
+        log.info("Controller ENTER generateBill");
+
         BillResponse response =
                 billService.generateBill(request);
+
+        log.info("EXIT generateBill");
 
         return ResponseEntity.ok(
                 ApiResponse.ok(

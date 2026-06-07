@@ -64,16 +64,25 @@ public class BillService implements IBillService {
     @Override
     public BillResponse generateBill(
             GenerateBillRequest req) throws Exception {
+        log.info("Validate request");
 
         validateGenerateRequest(req);
+        log.info("Validated");
+
+        log.info("Generate bill number");
 
         Long billNumber =
                 Long.valueOf(generateBillNumber());
 
+        log.info("Generated");
+
+
         SadadWsBills sadadBill =
                 buildSadadBill(req, billNumber);
+        log.info("Saving to db");
 
         sadadWsBillsRepo.save(sadadBill);
+        log.info("Saved");
 
         List<RevenueEntry> tahseelRevenueEntries =
                 req.getRevenueEntryList()
